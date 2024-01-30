@@ -6,7 +6,7 @@
 /*   By: aabel <aabel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 13:29:12 by aabel             #+#    #+#             */
-/*   Updated: 2024/01/30 13:38:45 by aabel            ###   ########.fr       */
+/*   Updated: 2024/01/30 13:55:08 by aabel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define ARRAY_HPP
 
 # include <iostream>
-# include <string>
 # include <exception>
 # include<ctime>
 # include <cstdlib>
@@ -23,6 +22,13 @@ template <typename T>
 class Array
 {
     public:
+        class OutOfRangeException : public std::exception
+        {
+            virtual const char* what() const throw()
+            {
+                return ("Out of range");
+            }
+        };
         Array(void)
         {
             this->_array = new T[0];
@@ -60,7 +66,7 @@ class Array
         T & operator[](unsigned int i) const
         {
             if (i >= this->_size)
-                throw std::exception();
+                throw OutOfRangeException();
             return (this->_array[i]);
         }
 
