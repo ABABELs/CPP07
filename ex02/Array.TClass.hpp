@@ -6,7 +6,7 @@
 /*   By: aabel <aabel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 13:29:12 by aabel             #+#    #+#             */
-/*   Updated: 2024/01/30 13:55:08 by aabel            ###   ########.fr       */
+/*   Updated: 2024/02/14 12:31:43 by aabel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,16 @@
 
 # include <iostream>
 # include <exception>
-# include<ctime>
+# include <ctime>
 # include <cstdlib>
+# include <string>
 
 template <typename T>
 class Array
 {
+    private:
+        T * _array;
+        int _size;
     public:
         class OutOfRangeException : public std::exception
         {
@@ -29,55 +33,53 @@ class Array
                 return ("Out of range");
             }
         };
-        Array(void)
+        Array<T>(void)
         {
             this->_array = new T[0];
             this->_size = 0;
         }
         
-        Array(unsigned int n)
+        Array<T>(int n)
         {
             this->_array = new T[n];
             this->_size = n;
         }
         
-        Array(Array const & src)
+        Array<T>(Array const & src)
         {
             *this = src;
         }
         
-        ~Array(void)
+        ~Array<T>(void)
         {
-            delete [] this->_array;
+            if (_array)
+                delete [] _array;
         }
 
-        Array & operator=(Array const & rhs)
+        Array<T> & operator=(Array<T> const & rhs)
         {
             if (this != &rhs)
             {
-                this->_array = new T[rhs._size];
-                this->_size = rhs._size;
-                for (unsigned int i = 0; i < this->_size; i++)
+                _size = rhs._size;
+                _array = new T[size()];
+                for (int i = 0; i < size(); i++)
                     this->_array[i] = rhs._array[i];
             }
             return (*this);
         }
         
-        T & operator[](unsigned int i) const
+        T & operator[](int i)
         {
-            if (i >= this->_size)
+            if (i >= size() || i < 0)
                 throw OutOfRangeException();
-            return (this->_array[i]);
+            return (_array[i]);
         }
 
-        unsigned int size(void) const
+        int size(void)
         {
-            return (this->_size);
+            return (_size);
         }
 
-    private:
-        T * _array;
-        unsigned int _size;
 };
 
 #endif
